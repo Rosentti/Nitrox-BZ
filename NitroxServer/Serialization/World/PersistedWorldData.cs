@@ -20,6 +20,9 @@ namespace NitroxServer.Serialization.World
         [DataMember(Order = 4)]
         public EntityData EntityData { get; set; }
 
+        [DataMember(Order = 5)]
+        public bool IsBelowZero { get; set; }
+
         public static PersistedWorldData From(World world)
         {
             return new PersistedWorldData
@@ -32,7 +35,8 @@ namespace NitroxServer.Serialization.World
                 },
                 PlayerData = PlayerData.From(world.PlayerManager.GetAllPlayers()),
                 GlobalRootData = GlobalRootData.From(world.WorldEntityManager.GetGlobalRootEntities(true)),
-                EntityData = EntityData.From(world.EntityRegistry.GetAllEntities(true))
+                EntityData = EntityData.From(world.EntityRegistry.GetAllEntities(true)),
+                IsBelowZero = world.IsBelowZero
             };
         }
 

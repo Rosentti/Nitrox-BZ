@@ -26,6 +26,7 @@ namespace NitroxServer_Subnautica
     {
         public override void RegisterDependencies(ContainerBuilder containerBuilder)
         {
+            containerBuilder.Register(c => GameInfo.Subnautica);
             base.RegisterDependencies(containerBuilder);
 
             containerBuilder.RegisterType<SimulationWhitelist>()

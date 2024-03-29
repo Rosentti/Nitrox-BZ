@@ -101,6 +101,7 @@ namespace NitroxServer.Serialization
 
         public float DefaultMaxOxygenValue { get; set; } = 45;
         public float DefaultHealthValue { get; set; } = 80;
+        public float DefaultTemperatureValue { get; set; } = 100;
         public float DefaultHungerValue { get; set; } = 50.5f;
         public float DefaultThirstValue { get; set; } = 90.5f;
 
@@ -109,7 +110,7 @@ namespace NitroxServer.Serialization
 
         public bool IsHardcore => GameMode == NitroxGameMode.HARDCORE;
         public bool IsPasswordRequired => ServerPassword != string.Empty;
-        public PlayerStatsData DefaultPlayerStats => new(DefaultOxygenValue, DefaultMaxOxygenValue, DefaultHealthValue, DefaultHungerValue, DefaultThirstValue, DefaultInfectionValue);
+        public PlayerStatsData DefaultPlayerStats => new(DefaultOxygenValue, DefaultMaxOxygenValue, DefaultHealthValue, DefaultHungerValue, DefaultThirstValue, DefaultInfectionValue, DefaultTemperatureValue);
         [PropertyDescription("If set to true, the server will try to open port on your router via UPnP")]
         public bool AutoPortForward { get; set; } = true;
         [PropertyDescription("Determines whether the server will listen for and reply to LAN discovery requests.")]

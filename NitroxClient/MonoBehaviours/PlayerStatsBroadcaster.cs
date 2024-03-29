@@ -31,13 +31,14 @@ public class PlayerStatsBroadcaster : MonoBehaviour
         {
             time = 0;
 
+            //TODOBZ
             float oxygen = Player.main.oxygenMgr.GetOxygenAvailable();
             float maxOxygen = Player.main.oxygenMgr.GetOxygenCapacity();
             float health = Player.main.liveMixin.health;
             float food = survival.food;
             float water = survival.water;
             float infectionAmount = Player.main.infectedMixin.GetInfectedAmount();
-            localPlayer.BroadcastStats(oxygen, maxOxygen, health, food, water, infectionAmount);
+            localPlayer.BroadcastStats(oxygen, maxOxygen, health, food, water, infectionAmount, 100);
         }
     }
 }

@@ -22,5 +22,6 @@ namespace NitroxServer.Serialization.World
         public GameData GameData { get; set; }
         public NitroxGameMode GameMode { get; set; }
         public string Seed { get; set; }
+        public bool IsBelowZero { get; set; }
     }
 }

@@ -24,6 +24,7 @@ namespace NitroxServer.ConsoleCommands
             builder.AppendLine($"Food: {player.Stats.Food}");
             builder.AppendLine($"Water: {player.Stats.Water}");
             builder.AppendLine($"Infection: {player.Stats.InfectionAmount}");
+            builder.AppendLine($"Temperature: {player.Stats.Temperature}");
 
             SendMessage(args.Sender, builder.ToString());
         }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using NitroxModel;
 using NitroxModel.Core;
 using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
@@ -121,11 +122,16 @@ namespace NitroxServer.Serialization.World
                     WorldData = Serializer.Deserialize<WorldData>(Path.Combine(saveDir, $"WorldData{FileEnding}")),
                     GlobalRootData = Serializer.Deserialize<GlobalRootData>(Path.Combine(saveDir, $"GlobalRootData{FileEnding}")),
                     EntityData = Serializer.Deserialize<EntityData>(Path.Combine(saveDir, $"EntityData{FileEnding}"))
-            };
+                };
 
                 if (!persistedData.IsValid())
                 {
                     throw new InvalidDataException("Save files are not valid");
+                }
+
+                var gi = NitroxServiceLocator.LocateService<GameInfo>();
+                if (persistedData.IsBelowZero != (gi.Name == "SubnauticaZero")) {
+                    throw new InvalidDataException($"Save file is invalid for game {gi.Name}");
                 }
 
                 return persistedData;
@@ -215,7 +221,8 @@ namespace NitroxServer.Serialization.World
 
                 GameData = pWorldData.WorldData.GameData,
                 GameMode = gameMode,
-                Seed = seed
+                Seed = seed,
+                IsBelowZero = NitroxServiceLocator.LocateService<GameInfo>().Name == "SubnauticaZero",
             };
 
             world.TimeKeeper = new(world.PlayerManager, pWorldData.WorldData.GameData.StoryTiming.ElapsedSeconds, pWorldData.WorldData.GameData.StoryTiming.RealTimeElapsed);

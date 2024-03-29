@@ -21,7 +21,7 @@ public class PlayerStatsProcessor : AuthenticatedPacketProcessor<PlayerStats>
             Log.WarnOnce($"[{nameof(PlayerStatsProcessor)}] Player ID mismatch (received: {packet.PlayerId}, real: {player.Id})");
             packet.PlayerId = player.Id;
         }
-        player.Stats = new PlayerStatsData(packet.Oxygen, packet.MaxOxygen, packet.Health, packet.Food, packet.Water, packet.InfectionAmount);
+        player.Stats = new PlayerStatsData(packet.Oxygen, packet.MaxOxygen, packet.Health, packet.Food, packet.Water, packet.InfectionAmount, packet.Temperature);
         playerManager.SendPacketToOtherPlayers(packet, player);
     }
 }

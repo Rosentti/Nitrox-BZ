@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using AssetsTools.NET.Extra;
 using NitroxServer_Subnautica.Resources.Parsers.Helper;
 
@@ -15,7 +16,7 @@ public abstract class AssetParser
     {
         rootPath = ResourceAssetsParser.FindDirectoryContainingResourceAssets();
         assetsManager = new AssetsManager();
-        assetsManager.LoadClassPackage(Path.Combine("Resources", "classdata.tpk"));
+        assetsManager.LoadClassPackage(Path.Combine(AppContext.BaseDirectory, "Resources", "classdata.tpk"));
         assetsManager.LoadClassDatabaseFromPackage("2019.4.36f1");
         assetsManager.SetMonoTempGenerator(monoGen = new ThreadSafeMonoCecilTempGenerator(Path.Combine(rootPath, "Managed")));
     }

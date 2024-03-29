@@ -22,6 +22,7 @@ public class PlayerStatsProcessor : ClientPacketProcessor<PlayerStats>
             vitals.SetHealth(playerStats.Health);
             vitals.SetFood(playerStats.Food);
             vitals.SetWater(playerStats.Water);
+            vitals.SetTemperature(playerStats.Temperature);
         }
     }
 }

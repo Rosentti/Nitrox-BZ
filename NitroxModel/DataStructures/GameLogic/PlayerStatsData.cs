@@ -24,6 +24,9 @@ namespace NitroxModel.DataStructures.GameLogic
         public float Water { get; }
         [DataMember(Order = 6)]
         public float InfectionAmount { get; }
+        
+        [DataMember(Order = 7)]
+        public float Temperature { get; }
 
         [IgnoreConstructor]
         protected PlayerStatsData()
@@ -31,7 +34,7 @@ namespace NitroxModel.DataStructures.GameLogic
             // Constructor for serialization. Has to be "protected" for json serialization.
         }
 
-        public PlayerStatsData(float oxygen, float maxOxygen, float health, float food, float water, float infectionAmount)
+        public PlayerStatsData(float oxygen, float maxOxygen, float health, float food, float water, float infectionAmount, float temperature)
         {
             Oxygen = oxygen;
             MaxOxygen = maxOxygen;
@@ -39,11 +42,12 @@ namespace NitroxModel.DataStructures.GameLogic
             Food = food;
             Water = water;
             InfectionAmount = infectionAmount;
+            Temperature = temperature;
         }
 
         public override string ToString()
         {
-            return $"[Oxygen: {Oxygen} MaxOxygen: {MaxOxygen} Health: {Health} Food: {Food} Water: {Water} InfectionAmount: {InfectionAmount} ]";
+            return $"[Oxygen: {Oxygen} MaxOxygen: {MaxOxygen} Health: {Health} Food: {Food} Water: {Water} InfectionAmount: {InfectionAmount} Temperature: {Temperature}]";
         }
     }
 }

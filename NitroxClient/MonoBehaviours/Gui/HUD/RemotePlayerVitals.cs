@@ -72,6 +72,10 @@ public class RemotePlayerVitals : MonoBehaviour
         waterBar.SetTargetValue(water);
     }
 
+    public void SetTemperature(float temperature) {
+        //TODOBZ
+    }
+
     public void LateUpdate()
     {
         oxygenBar.UpdateVisual();

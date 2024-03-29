@@ -79,11 +79,11 @@ public class LocalPlayer : ILocalNitroxPlayer
         }
     }
 
-    public void BroadcastStats(float oxygen, float maxOxygen, float health, float food, float water, float infectionAmount)
+    public void BroadcastStats(float oxygen, float maxOxygen, float health, float food, float water, float infectionAmount, float temperature)
     {
         if (PlayerId.HasValue)
         {
-            packetSender.Send(new PlayerStats(PlayerId.Value, oxygen, maxOxygen, health, food, water, infectionAmount));
+            packetSender.Send(new PlayerStats(PlayerId.Value, oxygen, maxOxygen, health, food, water, infectionAmount, temperature));
         }
     }
 

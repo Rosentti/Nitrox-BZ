@@ -69,7 +69,7 @@ public static class WorldManager
                 }
 
                 // Change the paramaters here to define what save file versions are eligible for use/upgrade
-                bool isValidVersion = version >= new Version(1, 7, 0, 0) && version <= NitroxEnvironment.Version;
+                bool isValidVersion = version >= new Version(1, 7, 0, 1) && version <= NitroxEnvironment.Version;
 
                 savesCache.Add(new Listing
                 {
@@ -138,6 +138,7 @@ public static class WorldManager
         File.Create(Path.Combine(saveDir, $"Version.{fileEnding}")).Close();
 
         serverConfig.SaveName = name;
+        serverConfig.Serialize(saveDir);
 
         return saveDir;
     }

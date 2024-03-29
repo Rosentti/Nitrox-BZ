@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using NitroxModel.Discovery;
 using NitroxModel.Discovery.InstallationFinders.Core;
 using NitroxModel.Platforms.OS.Windows.Internal;
@@ -15,9 +16,11 @@ namespace NitroxModel.Helper
     {
         public const string LAUNCHER_PATH_ENV_KEY = "NITROX_LAUNCHER_PATH";
         private const string PREFERRED_GAMEPATH_REGKEY = @"SOFTWARE\Nitrox\PreferredGamePath";
+        private const string PREFERRED_GAMEPATH_REGKEY_BZ = @"SOFTWARE\Nitrox\PreferredGamePath_BZ";
         private static string appDataPath;
         private static string launcherPath;
         private static string gamePath;
+        private static string gamePath_BZ;
 
         private static readonly IEnumerable<Func<string>> launcherPathDataSources = new List<Func<string>>
         {
@@ -26,6 +29,11 @@ namespace NitroxModel.Helper
             {
                 Assembly currentAsm = Assembly.GetEntryAssembly();
                 if (currentAsm?.GetName().Name.Equals("NitroxLauncher") ?? false)
+                {
+                    return Path.GetDirectoryName(currentAsm.Location);
+                }
+
+                if (currentAsm?.GetName().Name.Equals("NitroxCLI") ?? false)
                 {
                     return Path.GetDirectoryName(currentAsm.Location);
                 }
@@ -80,8 +88,39 @@ namespace NitroxModel.Helper
 
         public static string PreferredGamePath
         {
-            get => RegistryEx.Read<string>(PREFERRED_GAMEPATH_REGKEY);
-            set => RegistryEx.Write(PREFERRED_GAMEPATH_REGKEY, value);
+            get {
+                if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                    return "";
+                }
+
+                return RegistryEx.Read<string>(PREFERRED_GAMEPATH_REGKEY);
+            }
+            set {
+                if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                    return;
+                }
+
+                RegistryEx.Write(PREFERRED_GAMEPATH_REGKEY, value);
+            }
+        }
+
+        //TODO: This needs a better solution
+        public static string PreferredBZGamePath
+        {
+            get {
+                if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                    return "";
+                }
+
+                return RegistryEx.Read<string>(PREFERRED_GAMEPATH_REGKEY_BZ);
+            }
+            set {
+                if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) {
+                    return;
+                }
+
+                RegistryEx.Write(PREFERRED_GAMEPATH_REGKEY_BZ, value);
+            }
         }
 
         public static IGamePlatform GamePlatform { get; private set; }
@@ -120,6 +159,43 @@ namespace NitroxModel.Helper
                 // Ensures the path looks alright (no mixed / and \ path separators)
                 gamePath = Path.GetFullPath(value);
                 GamePlatform = GamePlatforms.GetPlatformByGameDir(gamePath);
+            }
+        }
+
+        public static string GamePath_BZ
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(gamePath_BZ))
+                {
+                    return gamePath_BZ;
+                }
+
+                List<GameFinderResult> finderResults = GameInstallationFinder.Instance.FindGame(GameInfo.SubnauticaBelowZero).TakeUntilInclusive(r => r is { IsOk: false }).ToList();
+                GameFinderResult potentiallyValidResult = finderResults.LastOrDefault();
+                if (potentiallyValidResult?.IsOk == true)
+                {
+                    Log.Debug($"Game installation was found by {potentiallyValidResult.FinderName} at '{potentiallyValidResult.Installation.Path}'");
+                    return gamePath_BZ = potentiallyValidResult.Installation.Path;
+                }
+
+                Log.Error($"Could not locate Subnautica: Below Zero installation directory: {Environment.NewLine}{string.Join(Environment.NewLine, finderResults.Select(i => $"{i.FinderName}: {i.ErrorMessage}"))}");
+                return string.Empty;
+            }
+            set
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    return;
+                }
+                if (!Directory.Exists(value))
+                {
+                    throw new ArgumentException("Given path is an invalid directory");
+                }
+
+                // Ensures the path looks alright (no mixed / and \ path separators)
+                gamePath_BZ = Path.GetFullPath(value);
+                GamePlatform = GamePlatforms.GetPlatformByGameDir(gamePath_BZ);
             }
         }
     }

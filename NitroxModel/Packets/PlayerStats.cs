@@ -13,8 +13,9 @@ public class PlayerStats : Packet
     public float Food { get; }
     public float Water { get; }
     public float InfectionAmount { get; }
+    public float Temperature { get; }
 
-    public PlayerStats(ushort playerId, float oxygen, float maxOxygen, float health, float food, float water, float infectionAmount)
+    public PlayerStats(ushort playerId, float oxygen, float maxOxygen, float health, float food, float water, float infectionAmount, float temperature)
     {
         PlayerId = playerId;
         Oxygen = oxygen;
@@ -23,6 +24,7 @@ public class PlayerStats : Packet
         Food = food;
         Water = water;
         InfectionAmount = infectionAmount;
+        Temperature = temperature;
         DeliveryMethod = NitroxDeliveryMethod.DeliveryMethod.UNRELIABLE_SEQUENCED;
         UdpChannel = UdpChannelId.PLAYER_STATS;
     }

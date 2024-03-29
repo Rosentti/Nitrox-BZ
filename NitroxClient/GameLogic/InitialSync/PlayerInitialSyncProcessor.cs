@@ -72,6 +72,7 @@ public class PlayerInitialSyncProcessor : InitialSyncProcessor
     {
         if (statsData != null)
         {
+            //TODOBZ
             Player.main.oxygenMgr.AddOxygen(statsData.Oxygen);
             Player.main.liveMixin.health = statsData.Health;
             Survival survivalComponent = Player.main.GetComponent<Survival>();
