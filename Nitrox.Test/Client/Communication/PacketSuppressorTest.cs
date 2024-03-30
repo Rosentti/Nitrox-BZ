@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NitroxModel.Packets;
 
-namespace NitroxClient.Communication;
+namespace NitroxClient_Subnautica.Communication;
 
 [TestClass]
 public class PacketSuppressorTest

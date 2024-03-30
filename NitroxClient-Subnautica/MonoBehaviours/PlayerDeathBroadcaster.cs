@@ -1,0 +1,23 @@
+﻿using NitroxClient_Subnautica.GameLogic;
+using NitroxModel.Core;
+using UnityEngine;
+
+namespace NitroxClient_Subnautica.MonoBehaviours
+{
+    public class PlayerDeathBroadcaster : MonoBehaviour
+    {
+        private LocalPlayer localPlayer;
+
+        public void Awake()
+        {
+            localPlayer = NitroxServiceLocator.LocateService<LocalPlayer>();
+
+            Player.main.playerDeathEvent.AddHandler(this, PlayerDeath);
+        }
+
+        private void PlayerDeath(Player player)
+        {
+            localPlayer.BroadcastDeath(player.transform.position);
+        }
+    }
+}

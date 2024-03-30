@@ -1,11 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Nitrox.Test.Client.Communication;
-using NitroxClient.Map;
+using NitroxClient_Subnautica.Map;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.DataStructures.Unity;
 using NitroxModel.Packets;
 
-namespace NitroxClient.Communication;
+namespace NitroxClient_Subnautica.Communication;
 
 [TestClass]
 public class DeferredPacketReceiverTest

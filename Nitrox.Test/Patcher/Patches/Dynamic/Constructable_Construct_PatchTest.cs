@@ -5,7 +5,7 @@ using NitroxTest.Patcher;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NitroxPatcher.Patches.Dynamic;
+namespace NitroxPatcher_Subnautica.Patches.Dynamic;
 
 [TestClass]
 public class Constructable_Construct_PatchTest

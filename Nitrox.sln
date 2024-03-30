@@ -16,11 +16,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionFolder", "SolutionF
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NitroxLauncher", "NitroxLauncher\NitroxLauncher.csproj", "{59EB8953-864F-4147-A210-7FC97E1A5294}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NitroxPatcher", "NitroxPatcher\NitroxPatcher.csproj", "{39E377AD-2163-4428-952D-EBECD402C8F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NitroxPatcher-Subnautica", "NitroxPatcher-Subnautica\NitroxPatcher-Subnautica.csproj", "{39E377AD-2163-4428-952D-EBECD402C8F3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NitroxModel-Subnautica", "NitroxModel-Subnautica\NitroxModel-Subnautica.csproj", "{47D774E0-750C-427B-8C38-F8F985114A2E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NitroxClient", "NitroxClient\NitroxClient.csproj", "{5453E724-5A8B-46A4-850B-1F17FA2E938D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NitroxClient-Subnautica", "NitroxClient-Subnautica\NitroxClient-Subnautica.csproj", "{5453E724-5A8B-46A4-850B-1F17FA2E938D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NitroxServer-Subnautica", "NitroxServer-Subnautica\NitroxServer-Subnautica.csproj", "{77692FDB-F713-41F1-B2AB-9019457B8909}"
 EndProject

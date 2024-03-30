@@ -6,7 +6,7 @@ using System.Reflection.Emit;
 using FluentAssertions;
 using HarmonyLib;
 using NitroxModel.Helper;
-using NitroxPatcher.PatternMatching;
+using NitroxPatcher_Subnautica.PatternMatching;
 
 namespace NitroxTest.Patcher
 {

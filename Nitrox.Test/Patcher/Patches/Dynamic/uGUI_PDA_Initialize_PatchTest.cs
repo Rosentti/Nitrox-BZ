@@ -5,7 +5,7 @@ using HarmonyLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NitroxTest.Patcher;
 
-namespace NitroxPatcher.Patches.Dynamic;
+namespace NitroxPatcher_Subnautica.Patches.Dynamic;
 
 [TestClass]
 public class uGUI_PDA_Initialize_PatchTest

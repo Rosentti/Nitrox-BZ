@@ -1,4 +1,4 @@
-﻿using NitroxClient.Communication.Abstract;
+﻿using NitroxClient_Subnautica.Communication.Abstract;
 using NitroxModel.DataStructures.Util;
 using NitroxModel.MultiplayerSession;
 using NitroxModel.Packets;

@@ -8,7 +8,7 @@ using NitroxModel_Subnautica.DataStructures;
 using NSubstitute;
 using UnityEngine;
 
-namespace NitroxClient.GameLogic.PlayerLogic.PlayerPreferences
+namespace NitroxClient_Subnautica.GameLogic.PlayerLogic.PlayerPreferences
 {
     [TestClass]
     public class PlayerPreferenceManagerTests

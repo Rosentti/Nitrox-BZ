@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NitroxModel.Helper;
 using NitroxTest.Patcher;
 
-namespace NitroxPatcher.Patches.Dynamic;
+namespace NitroxPatcher_Subnautica.Patches.Dynamic;
 
 [TestClass]
 public class CyclopsSonarButton_Update_PatchTest

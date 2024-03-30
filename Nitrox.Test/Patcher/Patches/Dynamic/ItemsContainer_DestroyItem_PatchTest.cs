@@ -5,9 +5,9 @@ using FluentAssertions;
 using HarmonyLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NitroxTest.Patcher;
-using static NitroxPatcher.Patches.Dynamic.ItemsContainer_DestroyItem_Patch;
+using static NitroxPatcher_Subnautica.Patches.Dynamic.ItemsContainer_DestroyItem_Patch;
 
-namespace NitroxPatcher.Patches.Dynamic;
+namespace NitroxPatcher_Subnautica.Patches.Dynamic;
 
 [TestClass]
 public class ItemsContainer_DestroyItem_PatchTest

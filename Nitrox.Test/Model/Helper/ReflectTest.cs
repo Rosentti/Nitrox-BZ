@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Reflection;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NitroxClient.MonoBehaviours.Gui.Input;
+using NitroxClient_Subnautica.MonoBehaviours.Gui.Input;
 
 namespace NitroxModel.Helper
 {

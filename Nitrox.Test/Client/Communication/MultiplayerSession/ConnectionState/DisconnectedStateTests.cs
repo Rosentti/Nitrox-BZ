@@ -3,11 +3,11 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Nitrox.Test.Client.Communication.MultiplayerSession;
-using NitroxClient.Communication.Abstract;
+using NitroxClient_Subnautica.Communication.Abstract;
 using NitroxModel.Packets;
 using NSubstitute;
 
-namespace NitroxClient.Communication.MultiplayerSession.ConnectionState
+namespace NitroxClient_Subnautica.Communication.MultiplayerSession.ConnectionState
 {
     [TestClass]
     public class DisconnectedStateTests

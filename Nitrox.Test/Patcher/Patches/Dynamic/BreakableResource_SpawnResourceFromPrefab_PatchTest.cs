@@ -5,9 +5,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NitroxTest.Patcher;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using static NitroxPatcher.Patches.Dynamic.BreakableResource_SpawnResourceFromPrefab_Patch;
+using static NitroxPatcher_Subnautica.Patches.Dynamic.BreakableResource_SpawnResourceFromPrefab_Patch;
 
-namespace NitroxPatcher.Patches.Dynamic;
+namespace NitroxPatcher_Subnautica.Patches.Dynamic;
 
 [TestClass]
 public class BreakableResource_SpawnResourceFromPrefab_PatchTest

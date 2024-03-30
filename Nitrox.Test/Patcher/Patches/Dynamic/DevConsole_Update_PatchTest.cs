@@ -4,9 +4,9 @@ using FluentAssertions;
 using HarmonyLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NitroxTest.Patcher;
-using static NitroxPatcher.Patches.Dynamic.DevConsole_Update_Patch;
+using static NitroxPatcher_Subnautica.Patches.Dynamic.DevConsole_Update_Patch;
 
-namespace NitroxPatcher.Patches.Dynamic;
+namespace NitroxPatcher_Subnautica.Patches.Dynamic;
 
 [TestClass]
 public class DevConsole_Update_PatchTest

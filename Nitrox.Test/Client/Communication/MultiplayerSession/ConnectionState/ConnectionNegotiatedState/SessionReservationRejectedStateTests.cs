@@ -1,10 +1,10 @@
 ﻿using System;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using NitroxClient.Communication.Abstract;
+using NitroxClient_Subnautica.Communication.Abstract;
 using NSubstitute;
 
-namespace NitroxClient.Communication.MultiplayerSession.ConnectionState
+namespace NitroxClient_Subnautica.Communication.MultiplayerSession.ConnectionState
 {
     [TestClass]
     public class SessionReservationRejectedStateTests

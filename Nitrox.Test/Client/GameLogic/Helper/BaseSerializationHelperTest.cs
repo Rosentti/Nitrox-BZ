@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace NitroxClient.GameLogic.Helper;
+namespace NitroxClient_Subnautica.GameLogic.Helper;
 
 [TestClass]
 public class BaseSerializationHelperTest

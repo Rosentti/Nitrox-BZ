@@ -2,11 +2,11 @@
 using FluentAssertions.Events;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Nitrox.Test.Client.Communication.MultiplayerSession;
-using NitroxClient.Communication.Abstract;
+using NitroxClient_Subnautica.Communication.Abstract;
 using NitroxModel.Packets;
 using NSubstitute;
 
-namespace NitroxClient.Communication.MultiplayerSession
+namespace NitroxClient_Subnautica.Communication.MultiplayerSession
 {
     [TestClass]
     public class MultiplayerSessionMangerTests

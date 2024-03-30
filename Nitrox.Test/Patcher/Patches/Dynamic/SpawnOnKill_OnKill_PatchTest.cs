@@ -5,9 +5,9 @@ using FluentAssertions;
 using HarmonyLib;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NitroxTest.Patcher;
-using static NitroxPatcher.Patches.Dynamic.SpawnOnKill_OnKill_Patch;
+using static NitroxPatcher_Subnautica.Patches.Dynamic.SpawnOnKill_OnKill_Patch;
 
-namespace NitroxPatcher.Patches.Dynamic;
+namespace NitroxPatcher_Subnautica.Patches.Dynamic;
 
 [TestClass]
 public class SpawnOnKill_OnKill_PatchTest

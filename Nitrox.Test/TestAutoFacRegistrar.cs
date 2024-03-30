@@ -1,5 +1,5 @@
 ﻿using Autofac;
-using NitroxClient.Debuggers;
+using NitroxClient_Subnautica.Debuggers;
 using NitroxModel.Core;
 using NSubstitute;
 

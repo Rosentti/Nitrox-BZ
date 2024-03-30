@@ -3,7 +3,7 @@ using System.IO;
 using LitJson;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace NitroxPatcher.Patches.Persistent;
+namespace NitroxPatcher_Subnautica.Patches.Persistent;
 
 [TestClass]
 public class Language_LoadLanguageFile_PatchTest
