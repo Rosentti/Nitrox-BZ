@@ -1,7 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="CheckDependenciesExist">
     <Choose>
-        <When Condition="'$(UnityModLibrary)' == 'true' or '$(TestLibrary)' == 'true'">
+        <When Condition="'$(GameReference)' == 'Subnautica'">
+            <PropertyGroup>
+                <BuildGenDllDir>$(BuildGenDllDirSubnautica)</BuildGenDllDir>
+                <GamePropsFile>$(GamePropsFileSubnautica)</GamePropsFile>
+            </PropertyGroup>
+        </When>
+        <When Condition="'$(GameReference)' == 'BelowZero'">
+            <PropertyGroup>
+                <BuildGenDllDir>$(BuildGenDllDirBelowZero)</BuildGenDllDir>
+                <GamePropsFile>$(GamePropsFileBelowZero)</GamePropsFile>
+            </PropertyGroup>
+        </When>
+    </Choose>
+    
+    <Target Name="ThrowIfInvalidGameReference" BeforeTargets="Restore;BeforeResolveReferences" Condition="'$(UnityModLibrary)' == 'True'">
+        <Error Text="Invalid GameReference '$(GameReference)', BuildGenDllDir '$(BuildGenDllDir)', GamePropsFile: '$(GamePropsFile)'" Condition="'$(BuildGenDllDir)' == ''" />
+    </Target>
+
+    <!-- Tell developer that it needs to build the Nitrox.BuildTool to fetch the game assemblies.
+    "dotnet restore" should still be allowed to run to fetch NuGet packages -->
+    <Target Name="PrepareForModding" AfterTargets="Restore;BeforeResolveReferences" Condition="'$(UnityModLibrary)' == 'true' and !Exists('$(BuildGenDllDir)')">
+        <Error Text="Run the Nitrox.BuildTool project to fetch the assemblies, before building other Nitrox projects. Game: '$(GameReference)', DllDir: '$(BuildGenDllDir)', InvalidGameReference: '$(InvalidGameReference)'" />
+    </Target>
+    
+    <!-- Include generated build properties. -->
+    <Import Project="$(GamePropsFile)" Condition="'$(GamePropsFile)' != ''"/>
+
+    <Choose>
+        <When Condition="('$(UnityModLibrary)' == 'true' or '$(TestLibrary)' == 'true') and '$(GameReference)' == 'Subnautica'">
             <!-- UnityEngine libraries to include -->
             <ItemGroup>
                 <Reference Include="FMODUnity">
@@ -273,7 +301,7 @@
     </Choose>
 
     <Choose>
-        <When Condition="'$(UnityModLibrary)' == 'true' and '$(TestLibrary)' != 'true'">
+        <When Condition="'$(UnityModLibrary)' == 'true' and '$(GameReference)' == 'Subnautica' and '$(TestLibrary)' != 'true'">
             <ItemGroup>
                 <Reference Include="Assembly-CSharp">
                     <HintPath>$(BuildGenDllDir)\Assembly-CSharp.dll</HintPath>
@@ -285,7 +313,7 @@
                 </Reference>
             </ItemGroup>
         </When>
-        <When Condition="'$(TestLibrary)' == 'true'">
+        <When Condition="'$(TestLibrary)' == 'true' and '$(GameReference)' == 'Subnautica'">
             <ItemGroup>
                 <Reference Include="Assembly-CSharp">
                     <HintPath>$(GameManagedDir)\Assembly-CSharp.dll</HintPath>

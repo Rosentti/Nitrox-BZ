@@ -3,6 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net472</TargetFramework>
         <Nullable>disable</Nullable>
+        <GameReference>Subnautica</GameReference>
     </PropertyGroup>
 
     <ItemGroup>

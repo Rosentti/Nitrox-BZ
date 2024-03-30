@@ -4,6 +4,7 @@
     <TargetFramework>net472</TargetFramework>
     <RootNamespace>NitroxModel_Subnautica</RootNamespace>
     <Nullable>disable</Nullable>
+    <GameReference>Subnautica</GameReference>
   </PropertyGroup>
 
   <ItemGroup>

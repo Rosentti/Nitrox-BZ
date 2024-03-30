@@ -4,6 +4,7 @@
         <TargetFramework>net472</TargetFramework>
         <Nullable>disable</Nullable>
         <IsPackable>false</IsPackable>
+        <GameReference>Subnautica</GameReference>
     </PropertyGroup>
 
     <ItemGroup>

@@ -26,19 +26,43 @@ namespace Nitrox.BuildTool
 
         public static async Task Main(string[] args)
         {
+            if (args.Length < 1 || string.IsNullOrEmpty(args[0])) {
+                throw new Exception("No game specified. Please specify 'SN', 'BZ' or 'BOTH'");
+            }
 
-            AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
+            string gameTarget = args[0];
+            if (gameTarget != "SN" && gameTarget != "BZ" && gameTarget != "BOTH")
             {
-                LogError(eventArgs.ExceptionObject.ToString());
-                Exit((eventArgs.ExceptionObject as Exception)?.HResult ?? 1);
-            };
+                throw new Exception($"Invalid game specified, '{gameTarget}' is not valid");
+            }
+            else
+            {
+                AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
+                {
+                    LogError(eventArgs.ExceptionObject.ToString());
+                    Exit((eventArgs.ExceptionObject as Exception)?.HResult ?? 1);
+                };
 
-            GameInstallData game = await Task.Run(EnsureGame);
-            Console.WriteLine($"Found game at {game.InstallDir}");
-            AbortIfInvalidGameVersion(game);
-            await EnsurePublicizedAssembliesAsync(game);
+                bool isBelowZero = gameTarget == "BZ";
+                if (gameTarget == "BOTH")
+                {
+                    await PublicizeGame("SN", false);
+                    await PublicizeGame("BZ", true);
+                }
+                else
+                {
+                    await PublicizeGame(gameTarget, isBelowZero);
+                }
 
-            Exit();
+                Exit();
+            }
+        }
+
+        private static async Task PublicizeGame(string gameTarget, bool isBelowZero) {
+            GameInstallData game = await Task.Run(() => EnsureGame(isBelowZero));
+            Console.WriteLine($"Found {gameTarget} at {game.InstallDir}");
+            AbortIfInvalidGameVersion(game, isBelowZero);
+            await EnsurePublicizedAssembliesAsync(game, isBelowZero);
         }
 
         private static void Exit(int exitCode = 0)
@@ -56,8 +80,13 @@ namespace Nitrox.BuildTool
             Console.ResetColor();
         }
 
-        private static void AbortIfInvalidGameVersion(GameInstallData game)
+        private static void AbortIfInvalidGameVersion(GameInstallData game, bool isBelowZero)
         {
+            // Don't worry about BZ for now
+            if (isBelowZero) {
+                return;
+            }
+
             string gameVersionFile = Path.Combine(game.InstallDir, "Subnautica_Data", "StreamingAssets", "SNUnmanagedData", "plastic_status.ignore");
             if (!File.Exists(gameVersionFile))
             {
@@ -83,7 +112,7 @@ namespace Nitrox.BuildTool
             Exit(2);
         }
 
-        private static GameInstallData EnsureGame()
+        private static GameInstallData EnsureGame(bool isBelowZero)
         {
             static bool ValidateUnityGame(GameInstallData game, out string error)
             {
@@ -107,13 +136,25 @@ namespace Nitrox.BuildTool
                 return true;
             }
 
-            string cacheFile = Path.Combine(GeneratedOutputDir, "game.props");
+            string gameName = "subnautica";
+            if (isBelowZero) {
+                gameName = "belowzero";
+            }
+
+            string cacheFile = Path.Combine(GeneratedOutputDir, $"{gameName}.props");
+            string gamePath;
+            if (isBelowZero) {
+                gamePath = NitroxUser.GamePath_BZ;
+            } else {
+                gamePath = NitroxUser.GamePath;
+            }
+
             if (GameInstallData.TryFrom(cacheFile, out GameInstallData game))
             {
                 // Retry if the saved path is invalid
                 if (!Directory.Exists(game.InstallDir))
                 {
-                    game = new GameInstallData(NitroxUser.GamePath);
+                    game = new GameInstallData(gamePath);
                 }
 
                 if (!ValidateUnityGame(game, out string error))
@@ -122,16 +163,20 @@ namespace Nitrox.BuildTool
                 }
             }
 
-            game ??= new GameInstallData(NitroxUser.GamePath);
+            game ??= new GameInstallData(gamePath);
             game.TrySave(cacheFile);
             return game;
         }
 
-        private static async Task EnsurePublicizedAssembliesAsync(GameInstallData game)
+        private static async Task EnsurePublicizedAssembliesAsync(GameInstallData game, bool isBelowZero)
         {
             static void LogReceived(object sender, string message) => Console.WriteLine(message);
+            string suffix = "_subnautica";
+            if (isBelowZero) {
+                suffix = "_belowzero";
+            }
 
-            if (Directory.Exists(Path.Combine(GeneratedOutputDir, "publicized_assemblies")))
+            if (Directory.Exists(Path.Combine(GeneratedOutputDir, $"publicized{suffix}")))
             {
                 Console.WriteLine("Assemblies are already publicized.");
                 return;
@@ -142,7 +187,7 @@ namespace Nitrox.BuildTool
             Stopwatch sw = Stopwatch.StartNew();
             try
             {
-                await Publicizer.PublicizeAsync(dllsToPublicize, "", Path.Combine(GeneratedOutputDir, "publicized_assemblies"));
+                await Publicizer.PublicizeAsync(dllsToPublicize, "", Path.Combine(GeneratedOutputDir, $"publicized_assemblies{suffix}"));
             }
             finally
             {

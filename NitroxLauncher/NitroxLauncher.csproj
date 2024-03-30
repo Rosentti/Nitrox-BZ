@@ -12,6 +12,9 @@
         <Authors>Nitrox</Authors>
         <Company>Nitrox</Company>
         <PackageProjectUrl>https://github.com/SubnauticaNitrox/Nitrox</PackageProjectUrl>
+
+        <!-- TODO: Launcher support for BZ? -->
+        <GameReference>Subnautica</GameReference>
     </PropertyGroup>
 
     <ItemGroup>

@@ -24,6 +24,20 @@ public abstract class NitroxPatch : INitroxPatch
     /// </summary>
     private readonly List<MethodBase> activePatches = new();
 
+    /// <summary>
+    ///     Override this method to return true if you want the patch to only be loaded in Below Zero.
+    /// </summary>
+    protected virtual bool PatchIsBelowZero() {
+        return false;
+    }
+
+    /// <summary>
+    ///     Override this method to return true if you want the patch to also be loaded in Below Zero as well as Subnautica.
+    /// </summary>
+    protected virtual bool CanLoadInBelowZero() {
+        return false;
+    }
+
     public abstract void Patch(Harmony harmony);
 
     /// <summary>
