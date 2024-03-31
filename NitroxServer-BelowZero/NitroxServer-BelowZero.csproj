@@ -27,7 +27,9 @@
   <Target Name="MoveNitroxAssetsToServerOutput" AfterTargets="Build">
     <ItemGroup>
       <NitroxBelowZeroTypeTreeData Include="..\Nitrox.Assets.BelowZero\**\*.tpk" />
+      <NitroxBelowZeroCSVData Include="..\Nitrox.Assets.BelowZero\**\*.csv" />
     </ItemGroup>
     <Copy SourceFiles="@(NitroxBelowZeroTypeTreeData)" DestinationFolder="$(TargetDir)\%(RecursiveDir)" />
+    <Copy SourceFiles="@(NitroxBelowZeroCSVData)" DestinationFolder="$(TargetDir)\%(RecursiveDir)" />
   </Target>
 </Project>
