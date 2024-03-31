@@ -1,18 +1,15 @@
+using System.Diagnostics;
+using NitroxClient_BelowZero.GameLogic.Spawning;
+using NitroxClient_BelowZero.Unity.Helper;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
+using UWE;
 
 namespace NitroxClient_BelowZero.GameLogic {
     public class NitroxLifepodDrop {
-        private static GameObject _main;
-        public static GameObject main {
-            get {
-                if (_main == null) {
-                    _main = Addressables.LoadAssetAsync<GameObject>("Assets/AddressableResources/WorldEntities/Tools/LifepodDrop.prefab").WaitForCompletion();
-                }
-
-                return _main;
-            }
-        }
+        public static GameObject main;
+        public static LifepodDrop drop => main.RequireComponent<LifepodDrop>();
+        public static RespawnPoint respawnPoint => main.RequireComponent<RespawnPoint>();
     }
 }

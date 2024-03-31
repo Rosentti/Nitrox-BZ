@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Diagnostics;
 using NitroxClient_BelowZero.Communication;
 using NitroxClient_BelowZero.Communication.Abstract;
 using NitroxClient_BelowZero.GameLogic.InitialSync.Abstract;
@@ -15,7 +16,7 @@ namespace NitroxClient_BelowZero.GameLogic.InitialSync;
 
 public class PlayerPositionInitialSyncProcessor : InitialSyncProcessor
 {
-    private static readonly Vector3 spawnRelativeToEscapePod = new Vector3(0.9f, 2.1f, 0);
+    private static readonly Vector3 spawnRelativeToLifepod = new Vector3(0.9f, 2.1f, 0);
 
     private readonly IPacketSender packetSender;
 
@@ -32,7 +33,7 @@ public class PlayerPositionInitialSyncProcessor : InitialSyncProcessor
         // We freeze the player so that he doesn't fall before the cells around him have loaded
         Player.main.cinematicModeActive = true;
 
-        AttachPlayerToEscapePod(packet.AssignedEscapePodId);
+        AttachPlayerToLifepod(packet.AssignedEscapePodId);
 
         Vector3 position = packet.PlayerSpawnData.ToUnity();
         Quaternion rotation = packet.PlayerSpawnRotation.ToUnity();
@@ -60,7 +61,7 @@ public class PlayerPositionInitialSyncProcessor : InitialSyncProcessor
 
         if (!sub.Value.TryGetComponent(out SubRoot subRoot))
         {
-            Log.Debug("SubRootId-GameObject has no SubRoot component, so it's assumed to be the EscapePod");
+            Log.Debug("SubRootId-GameObject has no SubRoot component, so it's assumed to be the Lifepod");
             yield return Terrain.WaitForWorldLoad();
             yield break;
         }
@@ -82,17 +83,23 @@ public class PlayerPositionInitialSyncProcessor : InitialSyncProcessor
         Player.main.UpdateIsUnderwater();
     }
 
-    private void AttachPlayerToEscapePod(NitroxId escapePodId)
+    private void AttachPlayerToLifepod(NitroxId escapePodId)
     {
-        // The NitroxId passed in here will never exist. What to do?
-        //GameObject escapePod = NitroxEntity.RequireObjectFrom(escapePodId);
+        GameObject lifepod = NitroxEntity.RequireObjectFrom(escapePodId);
+        Trace.Assert(lifepod != null);
+
+        NitroxLifepodDrop.main = lifepod;
+        NitroxLifepodDrop.drop.dropZone = new SupplyDropZone(lifepod.transform.position);
+        NitroxLifepodDrop.main.transform.position = lifepod.transform.position;
+        NitroxLifepodDrop.drop.dropComplete = true;
+        NitroxLifepodDrop.respawnPoint.transform.position = lifepod.transform.position + spawnRelativeToLifepod;
+        NitroxLifepodDrop.drop.extendLegs = true;
+        NitroxLifepodDrop.main.GetComponent<PingInstance>().pingType = PingType.DropPod;
         
-        // NitroxLifepodDrop.main.transform.position = escapePod.transform.position;
-        // NitroxLifepodDrop.main.RequireComponent<RespawnPoint>().transform.position = escapePod.transform.position + spawnRelativeToEscapePod;
 
-        // Player.main.transform.position = NitroxLifepodDrop.main.RequireComponent<RespawnPoint>().GetSpawnPosition();
+        Player.main.transform.position = NitroxLifepodDrop.respawnPoint.GetSpawnPosition();
 
-        // Player.main.EnterInterior(NitroxLifepodDrop.main.RequireComponent<LifepodDrop>());
+        //Player.main.EnterInterior(NitroxLifepodDrop.main.RequireComponent<LifepodDrop>());
     }
 
 }

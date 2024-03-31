@@ -64,9 +64,11 @@ namespace NitroxServer.GameLogic
             if (gameInfo == GameInfo.Subnautica) {
                 escapePod.ChildEntities.Add(new PrefabChildEntity(new NitroxId(), "5c06baec-0539-4f26-817d-78443548cc52", new NitroxTechType("Radio"), 0, null, escapePod.Id));
                 escapePod.ChildEntities.Add(new PrefabChildEntity(new NitroxId(), "c0175cf7-0b6a-4a1d-938f-dad0dbb6fa06", new NitroxTechType("MedicalCabinet"), 0, null, escapePod.Id));
+                escapePod.ChildEntities.Add(new PrefabChildEntity(new NitroxId(), "9f16d82b-11f4-4eeb-aedf-f2fa2bfca8e3", new NitroxTechType("Fabricator"), 0, null, escapePod.Id));
+            } else {
+                escapePod.ChildEntities.Add(new PrefabChildEntity(new NitroxId(), "cbbb7144-1433-47ea-b1d9-02efd3c2cbae8", new NitroxTechType("Fabricator"), 0, null, escapePod.Id));
             }
-    
-            escapePod.ChildEntities.Add(new PrefabChildEntity(new NitroxId(), "9f16d82b-11f4-4eeb-aedf-f2fa2bfca8e3", new NitroxTechType("Fabricator"), 0, null, escapePod.Id));
+            
             escapePod.ChildEntities.Add(new InventoryEntity(0, new NitroxId(), new NitroxTechType("SmallStorage"), null, escapePod.Id, new List<Entity>()));
 
             entityRegistry.AddOrUpdate(escapePod);
@@ -76,6 +78,11 @@ namespace NitroxServer.GameLogic
 
         private NitroxVector3 GetStartPosition()
         {
+            // In Below Zero, the position should always be the same
+            if (gameInfo == GameInfo.SubnauticaBelowZero) {
+                return new NitroxVector3(-136.2f, -11f, 43.7f);
+            }
+
             List<EscapePodWorldEntity> escapePods = entityRegistry.GetEntities<EscapePodWorldEntity>();
 
             Random rnd = new Random(seed.GetHashCode());

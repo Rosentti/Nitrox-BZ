@@ -33,7 +33,7 @@ namespace NitroxModel.Helper
                     return Path.GetDirectoryName(currentAsm.Location);
                 }
 
-                if (currentAsm?.GetName().Name.Equals("NitroxCLI") ?? false)
+                if (currentAsm?.GetName().Name.Equals("Nitrox.CLI") ?? false)
                 {
                     return Path.GetDirectoryName(currentAsm.Location);
                 }

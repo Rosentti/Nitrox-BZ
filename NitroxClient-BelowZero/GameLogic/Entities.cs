@@ -63,7 +63,6 @@ namespace NitroxClient_BelowZero.GameLogic
             entitySpawnersByType[typeof(GlobalRootEntity)] = new GlobalRootEntitySpawner();
             entitySpawnersByType[typeof(BaseLeakEntity)] = new BaseLeakEntitySpawner(liveMixinManager);
             entitySpawnersByType[typeof(BuildEntity)] = new BuildEntitySpawner(this, (BaseLeakEntitySpawner)entitySpawnersByType[typeof(BaseLeakEntity)]);
-            entitySpawnersByType[typeof(RadiationLeakEntity)] = new RadiationLeakEntitySpawner(timeManager);
             entitySpawnersByType[typeof(ModuleEntity)] = new ModuleEntitySpawner(this);
             entitySpawnersByType[typeof(GhostEntity)] = new GhostEntitySpawner();
             entitySpawnersByType[typeof(OxygenPipeEntity)] = new OxygenPipeEntitySpawner(this, (WorldEntitySpawner)entitySpawnersByType[typeof(WorldEntity)]);
@@ -185,6 +184,11 @@ namespace NitroxClient_BelowZero.GameLogic
                     continue;
                 }
 
+                if (!entitySpawnersByType.ContainsKey(entity.GetType())) {
+                    Log.Error($"Entity does not have spawner: {entity}");
+                    continue;
+                }
+
                 // Executing the spawn instructions whether they're sync or async
                 IEntitySpawner entitySpawner = entitySpawnersByType[entity.GetType()];
                 if (entitySpawner is not ISyncEntitySpawner syncEntitySpawner ||
@@ -260,9 +264,7 @@ namespace NitroxClient_BelowZero.GameLogic
         {
             if (!NitroxEntity.TryGetObjectFrom(entity.Id, out GameObject gameObject))
             {
-#if DEBUG && ENTITY_LOG
-                Log.Error($"Entity was already spawned but not found(is it in another chunk?) NitroxId: {entity.Id} TechType: {entity.TechType} ClassId: {entity.ClassId} Transform: {entity.Transform}");
-#endif
+                Log.Error($"Entity was already spawned but not found(is it in another chunk?) NitroxId: {entity.Id} TechType: {entity.TechType}");
                 return;
             }
             entityMetadataManager.ApplyMetadata(gameObject, entity.Metadata);

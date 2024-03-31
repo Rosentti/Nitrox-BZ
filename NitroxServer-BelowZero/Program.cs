@@ -66,6 +66,10 @@ public class Program
             };
         }
 
+        if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable(NitroxUser.LAUNCHER_PATH_ENV_KEY))) {
+            Environment.SetEnvironmentVariable(NitroxUser.LAUNCHER_PATH_ENV_KEY, AppContext.BaseDirectory);
+        }
+
         // The thread that writers to console is paused while selecting text in console. So console writer needs to be async.
         Log.Setup(true, isConsoleApp: true);
         AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;

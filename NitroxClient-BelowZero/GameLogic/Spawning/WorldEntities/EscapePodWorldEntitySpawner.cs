@@ -1,12 +1,16 @@
+using System;
 using System.Collections;
 using NitroxClient_BelowZero.GameLogic.Spawning.Metadata;
 using NitroxClient_BelowZero.MonoBehaviours;
 using NitroxClient_BelowZero.MonoBehaviours.CinematicController;
+using NitroxClient_BelowZero.Unity.Helper;
 using NitroxModel.DataStructures.GameLogic.Entities;
 using NitroxModel.DataStructures.Util;
 using NitroxModel_BelowZero.DataStructures;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+using UWE;
 
 namespace NitroxClient_BelowZero.GameLogic.Spawning.WorldEntities
 {
@@ -19,13 +23,6 @@ namespace NitroxClient_BelowZero.GameLogic.Spawning.WorldEntities
             this.entityMetadataManager = entityMetadataManager;
         }
 
-        /*
-         * When creating additional escape pods (multiple users with multiple pods)
-         * we want to supress the escape pod's awake method so it doesn't override
-         * EscapePod.main to the new escape pod.
-         */
-        public static bool SURPRESS_ESCAPE_POD_AWAKE_METHOD;
-
         public IEnumerator SpawnAsync(WorldEntity entity, Optional<GameObject> parent, EntityCell cellRoot, TaskResult<Optional<GameObject>> result)
         {
             if (entity is not EscapePodWorldEntity escapePodEntity)
@@ -35,34 +32,40 @@ namespace NitroxClient_BelowZero.GameLogic.Spawning.WorldEntities
                 yield break;
             }
 
-            SURPRESS_ESCAPE_POD_AWAKE_METHOD = true;
-
-            GameObject escapePod = CreateNewEscapePod(escapePodEntity);
-
-            SURPRESS_ESCAPE_POD_AWAKE_METHOD = false;
-
-            result.Set(Optional.Of(escapePod));
-        }
-
-        private GameObject CreateNewEscapePod(EscapePodWorldEntity escapePodEntity)
-        {
-            // TODO: When we want to implement multiple escape pods, instantiate the prefab. Backlog task: #1945
-            //       This will require some work as instantiating the prefab as-is will not make it visible.
-            //GameObject escapePod = Object.Instantiate(EscapePod.main.gameObject);
-
-            string key = "WorldEntities/Tools/LifepodDrop.prefab";
-            GameObject escapePod = GameObject.Instantiate(Addressables.LoadAssetAsync<GameObject>(key).WaitForCompletion());
-            if (escapePod.TryGetComponent<PrefabIdentifier>(out PrefabIdentifier pi))
+            //TODO: get with filename 'WorldEntities/Tools/LifepodDrop.prefab' instead
+            string classid = "";
+            foreach (var file in PrefabDatabase.prefabFiles)
             {
-                pi.SetPrefabKey(key);
+                if (file.Value == "WorldEntities/Tools/LifepodDrop.prefab") {
+                    classid = file.Key;
+                }
             }
 
-            // UnityEngine.Component.DestroyImmediate(escapePod.GetComponent<NitroxEntity>()); // if template has a pre-existing NitroxEntity, remove.
-            NitroxEntity.SetNewId(escapePod, escapePodEntity.Id);
+            if (string.IsNullOrEmpty(classid)) {
+                Log.Error("Did not find LifepodDrop.prefab");
+                yield break;
+            }
 
-            entityMetadataManager.ApplyMetadata(escapePod, escapePodEntity.Metadata);
+            if (!DefaultWorldEntitySpawner.TryGetCachedPrefab(out GameObject prefab, classId: classid))
+            {
+                TaskResult<GameObject> prefabResult = new();
+                yield return DefaultWorldEntitySpawner.RequestPrefab(classid, prefabResult);
+                if (!prefabResult.Get())
+                {
+                    Log.Error($"Couldn't find a prefab for {nameof(WorldEntity)} of ClassId '{classid}'");
+                    yield break;
+                }
+                prefab = prefabResult.Get();
+            }
 
-            Rigidbody rigidbody = escapePod.GetComponent<Rigidbody>();
+            GameObject gameObject = GameObjectHelper.InstantiateWithId(prefab, entity.Id);
+
+            // The RespawnPoint is missing, although it should exist. Just add it here since it's logic is very simple.
+            gameObject.AddComponent<RespawnPoint>();
+
+            entityMetadataManager.ApplyMetadata(gameObject, escapePodEntity.Metadata);
+
+            Rigidbody rigidbody = gameObject.GetComponent<Rigidbody>();
             if (rigidbody != null)
             {
                 rigidbody.constraints = RigidbodyConstraints.FreezeAll;
@@ -72,18 +75,18 @@ namespace NitroxClient_BelowZero.GameLogic.Spawning.WorldEntities
                 Log.Error("Escape pod did not have a rigid body!");
             }
 
-            escapePod.transform.position = escapePodEntity.Transform.Position.ToUnity();
+            gameObject.transform.position = escapePodEntity.Transform.Position.ToUnity();
 
-            FixStartMethods(escapePod);
+            FixStartMethods(gameObject);
 
             // Start() isn't executed for the EscapePod, why? Idk, maybe because it's a scene...
-            MultiplayerCinematicReference reference = escapePod.AddComponent<MultiplayerCinematicReference>();
-            foreach (PlayerCinematicController controller in escapePod.GetComponentsInChildren<PlayerCinematicController>())
+            MultiplayerCinematicReference reference = gameObject.AddComponent<MultiplayerCinematicReference>();
+            foreach (PlayerCinematicController controller in gameObject.GetComponentsInChildren<PlayerCinematicController>())
             {
                 reference.AddController(controller);
             }
-
-            return escapePod;
+            
+            result.Set(Optional.Of(gameObject));
         }
 
         /// <summary>

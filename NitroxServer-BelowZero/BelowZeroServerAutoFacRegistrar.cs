@@ -61,7 +61,7 @@ namespace NitroxServer_BelowZero
 
             containerBuilder.RegisterType<BelowZeroMap>().As<IMap>().InstancePerLifetimeScope();
             containerBuilder.RegisterType<EntityRegistry>().AsSelf().InstancePerLifetimeScope();
-            containerBuilder.RegisterType<SubnauticaWorldModifier>().As<IWorldModifier>().InstancePerLifetimeScope();
+            containerBuilder.RegisterType<BelowZeroWorldModifier>().As<IWorldModifier>().InstancePerLifetimeScope();
             containerBuilder.Register(c => new FMODWhitelist(GameInfo.SubnauticaBelowZero)).InstancePerLifetimeScope();
         }
     }
