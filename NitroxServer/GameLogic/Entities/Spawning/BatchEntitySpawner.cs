@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using NitroxModel;
 using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.DataStructures.GameLogic.Entities;
@@ -59,7 +60,7 @@ public class BatchEntitySpawner : IEntitySpawner
 
     private static readonly NitroxQuaternion prefabZUpRotation = NitroxQuaternion.FromEuler(new(-90f, 0f, 0f));
 
-    public BatchEntitySpawner(EntitySpawnPointFactory entitySpawnPointFactory, IUweWorldEntityFactory worldEntityFactory, IUwePrefabFactory prefabFactory, List<NitroxInt3> loadedPreviousParsed, ServerProtoBufSerializer serializer,
+    public BatchEntitySpawner(GameInfo gameinfo, EntitySpawnPointFactory entitySpawnPointFactory, IUweWorldEntityFactory worldEntityFactory, IUwePrefabFactory prefabFactory, List<NitroxInt3> loadedPreviousParsed, ServerProtoBufSerializer serializer,
                               IEntityBootstrapperManager entityBootstrapperManager, Dictionary<string, PrefabPlaceholdersGroupAsset> placeholdersGroupsByClassId, PDAStateData pdaStateData, string seed)
     {
         parsedBatches = new HashSet<NitroxInt3>(loadedPreviousParsed);
@@ -68,7 +69,7 @@ public class BatchEntitySpawner : IEntitySpawner
         this.entityBootstrapperManager = entityBootstrapperManager;
         this.placeholdersGroupsByClassId = placeholdersGroupsByClassId;
         this.pdaStateData = pdaStateData;
-        batchCellsParser = new BatchCellsParser(entitySpawnPointFactory, serializer);
+        batchCellsParser = new BatchCellsParser(gameinfo, entitySpawnPointFactory, serializer);
         this.seed = seed;
     }
 

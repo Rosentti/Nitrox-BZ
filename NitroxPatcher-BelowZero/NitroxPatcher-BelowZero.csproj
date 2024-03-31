@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net472</TargetFramework>
+        <Nullable>disable</Nullable>
+        <GameReference>BelowZero</GameReference>
+        <RootNamespace>NitroxPatcher_BelowZero</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="HarmonyX" Version="2.10.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\NitroxClient-BelowZero\NitroxClient-BelowZero.csproj" />
+      <ProjectReference Include="..\NitroxModel-BelowZero\NitroxModel-BelowZero.csproj" />
+    </ItemGroup>
+    
+    <ItemGroup>
+        <Reference Include="FMODUnity">
+          <HintPath>$(GameManagedDir)\FMODUnity.dll</HintPath>
+        </Reference>
+        <Reference Include="Sentry">
+          <HintPath>$(GameManagedDir)\Sentry.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+</Project>

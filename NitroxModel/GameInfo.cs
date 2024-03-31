@@ -9,7 +9,8 @@ namespace NitroxModel
             DataFolder = "Subnautica_Data",
             ExeName = "Subnautica.exe",
             SteamAppId = 264710,
-            MsStoreStartUrl = @"ms-xbl-38616e6e:\\"
+            MsStoreStartUrl = @"ms-xbl-38616e6e:\\",
+            MapSubFolderName = "Build18"
         };
 
         public static readonly GameInfo SubnauticaBelowZero = new()
@@ -19,7 +20,8 @@ namespace NitroxModel
             DataFolder = "SubnauticaZero_Data",
             ExeName = "SubnauticaZero.exe",
             SteamAppId = 848450,
-            MsStoreStartUrl = @"ms-xbl-6e27970f:\\"
+            MsStoreStartUrl = @"ms-xbl-6e27970f:\\",
+            MapSubFolderName = "Expansion"
         };
 
         public string Name { get; private set; }
@@ -33,6 +35,8 @@ namespace NitroxModel
         public int SteamAppId { get; private set; }
 
         public string MsStoreStartUrl { get; private set; }
+
+        public string MapSubFolderName { get; private set; }
 
         private GameInfo()
         {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
+using NitroxModel;
 using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.DataStructures.Unity;
@@ -25,9 +26,11 @@ namespace NitroxServer.Serialization
         private readonly EntitySpawnPointFactory entitySpawnPointFactory;
         private readonly ServerProtoBufSerializer serializer;
         private readonly Dictionary<string, Type> surrogateTypes;
+        private readonly GameInfo gameinfo;
 
-        public BatchCellsParser(EntitySpawnPointFactory entitySpawnPointFactory, ServerProtoBufSerializer serializer)
+        public BatchCellsParser(GameInfo gameinfo, EntitySpawnPointFactory entitySpawnPointFactory, ServerProtoBufSerializer serializer)
         {
+            this.gameinfo = gameinfo;
             this.entitySpawnPointFactory = entitySpawnPointFactory;
             this.serializer = serializer;
 
@@ -50,13 +53,19 @@ namespace NitroxServer.Serialization
 
         public void ParseFile(NitroxInt3 batchId, string pathPrefix, string prefix, string suffix, List<EntitySpawnPoint> spawnPoints)
         {
-            string subnauticaPath = NitroxUser.GamePath;
+            string subnauticaPath;
+            if (gameinfo == GameInfo.SubnauticaBelowZero) {
+                subnauticaPath = NitroxUser.GamePath_BZ;
+            } else {
+                subnauticaPath = NitroxUser.GamePath;
+            }
+
             if (string.IsNullOrEmpty(subnauticaPath))
             {
                 return;
             }
 
-            string path = Path.Combine(subnauticaPath, "Subnautica_Data", "StreamingAssets", "SNUnmanagedData", "Build18");
+            string path = Path.Combine(subnauticaPath, gameinfo.DataFolder, "StreamingAssets", "SNUnmanagedData", gameinfo.MapSubFolderName);
             string fileName = Path.Combine(path, pathPrefix, $"{prefix}batch-cells-{batchId.X}-{batchId.Y}-{batchId.Z}{suffix}.bin");
 
             if (!File.Exists(fileName))

@@ -29,7 +29,7 @@
     <Import Project="$(GamePropsFile)" Condition="'$(GamePropsFile)' != ''"/>
 
     <Choose>
-        <When Condition="('$(UnityModLibrary)' == 'true' or '$(TestLibrary)' == 'true') and '$(GameReference)' == 'Subnautica'">
+        <When Condition="'$(UnityModLibrary)' == 'true' or '$(TestLibrary)' == 'true'">
             <!-- UnityEngine libraries to include -->
             <ItemGroup>
                 <Reference Include="FMODUnity">
@@ -301,7 +301,7 @@
     </Choose>
 
     <Choose>
-        <When Condition="'$(UnityModLibrary)' == 'true' and '$(GameReference)' == 'Subnautica' and '$(TestLibrary)' != 'true'">
+        <When Condition="'$(UnityModLibrary)' == 'true' and '$(TestLibrary)' != 'true'">
             <ItemGroup>
                 <Reference Include="Assembly-CSharp">
                     <HintPath>$(BuildGenDllDir)\Assembly-CSharp.dll</HintPath>
@@ -313,7 +313,7 @@
                 </Reference>
             </ItemGroup>
         </When>
-        <When Condition="'$(TestLibrary)' == 'true' and '$(GameReference)' == 'Subnautica'">
+        <When Condition="'$(TestLibrary)' == 'true'">
             <ItemGroup>
                 <Reference Include="Assembly-CSharp">
                     <HintPath>$(GameManagedDir)\Assembly-CSharp.dll</HintPath>

@@ -8,9 +8,15 @@ public class PDALogEntryAdd : Packet
     public string Key { get; }
     public float Timestamp { get; }
 
-    public PDALogEntryAdd(string key, float timestamp)
+    /// <summary>
+    ///     (BZ ONLY) If this log entry being added should play a sound
+    /// </summary>
+    public bool PlaySound { get; }
+
+    public PDALogEntryAdd(string key, float timestamp, bool playSound)
     {
         Key = key;
         Timestamp = timestamp;
+        PlaySound = playSound;
     }
 }

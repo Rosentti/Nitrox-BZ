@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NitroxModel;
 using NitroxModel.DataStructures;
 using NitroxModel.DataStructures.GameLogic;
 using NitroxModel.DataStructures.GameLogic.Entities;
@@ -20,9 +21,11 @@ namespace NitroxServer.GameLogic
         private readonly string seed;
 
         private readonly RandomStartGenerator randomStart;
+        private readonly GameInfo gameInfo;
 
-        public EscapePodManager(EntityRegistry entityRegistry, RandomStartGenerator randomStart, string seed)
+        public EscapePodManager(GameInfo gameInfo, EntityRegistry entityRegistry, RandomStartGenerator randomStart, string seed)
         {
+            this.gameInfo = gameInfo;
             this.seed = seed;
             this.randomStart = randomStart;
             this.entityRegistry = entityRegistry;
@@ -57,9 +60,12 @@ namespace NitroxServer.GameLogic
         private EscapePodWorldEntity CreateNewEscapePod()
         {
             EscapePodWorldEntity escapePod = new EscapePodWorldEntity(GetStartPosition(), new NitroxId(), null);
-
-            escapePod.ChildEntities.Add(new PrefabChildEntity(new NitroxId(), "5c06baec-0539-4f26-817d-78443548cc52", new NitroxTechType("Radio"), 0, null, escapePod.Id));
-            escapePod.ChildEntities.Add(new PrefabChildEntity(new NitroxId(), "c0175cf7-0b6a-4a1d-938f-dad0dbb6fa06", new NitroxTechType("MedicalCabinet"), 0, null, escapePod.Id));
+            
+            if (gameInfo == GameInfo.Subnautica) {
+                escapePod.ChildEntities.Add(new PrefabChildEntity(new NitroxId(), "5c06baec-0539-4f26-817d-78443548cc52", new NitroxTechType("Radio"), 0, null, escapePod.Id));
+                escapePod.ChildEntities.Add(new PrefabChildEntity(new NitroxId(), "c0175cf7-0b6a-4a1d-938f-dad0dbb6fa06", new NitroxTechType("MedicalCabinet"), 0, null, escapePod.Id));
+            }
+    
             escapePod.ChildEntities.Add(new PrefabChildEntity(new NitroxId(), "9f16d82b-11f4-4eeb-aedf-f2fa2bfca8e3", new NitroxTechType("Fabricator"), 0, null, escapePod.Id));
             escapePod.ChildEntities.Add(new InventoryEntity(0, new NitroxId(), new NitroxTechType("SmallStorage"), null, escapePod.Id, new List<Entity>()));
 

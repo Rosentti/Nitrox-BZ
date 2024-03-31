@@ -34,9 +34,11 @@ namespace NitroxServer.Serialization.World
         private readonly RandomStartGenerator randomStart;
         private readonly IWorldModifier worldModifier;
         private readonly SaveDataUpgrade[] upgrades;
+        private readonly GameInfo gameInfo;
 
-        public WorldPersistence(ServerProtoBufSerializer protoBufSerializer, ServerJsonSerializer jsonSerializer, ServerConfig config, RandomStartGenerator randomStart, IWorldModifier worldModifier, SaveDataUpgrade[] upgrades)
+        public WorldPersistence(GameInfo gameInfo, ServerProtoBufSerializer protoBufSerializer, ServerJsonSerializer jsonSerializer, ServerConfig config, RandomStartGenerator randomStart, IWorldModifier worldModifier, SaveDataUpgrade[] upgrades)
         {
+            this.gameInfo = gameInfo;
             this.protoBufSerializer = protoBufSerializer;
             this.jsonSerializer = jsonSerializer;
             this.config = config;
@@ -130,8 +132,8 @@ namespace NitroxServer.Serialization.World
                 }
 
                 var gi = NitroxServiceLocator.LocateService<GameInfo>();
-                if (persistedData.IsBelowZero != (gi.Name == "SubnauticaZero")) {
-                    throw new InvalidDataException($"Save file is invalid for game {gi.Name}");
+                if (persistedData.WorldData.IsBelowZero != (gi.Name == "SubnauticaZero")) {
+                    throw new InvalidDataException($"Save file is invalid for game {gi.Name}, save IsBelowZero {persistedData.WorldData.IsBelowZero}");
                 }
 
                 return persistedData;
@@ -215,14 +217,14 @@ namespace NitroxServer.Serialization.World
                 SimulationOwnershipData = new SimulationOwnershipData(),
                 PlayerManager = new PlayerManager(pWorldData.PlayerData.GetPlayers(), config),
 
-                EscapePodManager = new EscapePodManager(entityRegistry, randomStart, seed),
+                EscapePodManager = new EscapePodManager(gameInfo, entityRegistry, randomStart, seed),
 
                 EntityRegistry = entityRegistry,
 
                 GameData = pWorldData.WorldData.GameData,
                 GameMode = gameMode,
                 Seed = seed,
-                IsBelowZero = NitroxServiceLocator.LocateService<GameInfo>().Name == "SubnauticaZero",
+                IsBelowZero = NitroxServiceLocator.LocateService<GameInfo>() == GameInfo.SubnauticaBelowZero,
             };
 
             world.TimeKeeper = new(world.PlayerManager, pWorldData.WorldData.GameData.StoryTiming.ElapsedSeconds, pWorldData.WorldData.GameData.StoryTiming.RealTimeElapsed);
@@ -230,6 +232,7 @@ namespace NitroxServer.Serialization.World
             world.ScheduleKeeper = new ScheduleKeeper(pWorldData.WorldData.GameData.PDAState, pWorldData.WorldData.GameData.StoryGoals, world.TimeKeeper, world.PlayerManager);
 
             world.BatchEntitySpawner = new BatchEntitySpawner(
+                NitroxServiceLocator.LocateService<GameInfo>(),
                 NitroxServiceLocator.LocateService<EntitySpawnPointFactory>(),
                 NitroxServiceLocator.LocateService<IUweWorldEntityFactory>(),
                 NitroxServiceLocator.LocateService<IUwePrefabFactory>(),

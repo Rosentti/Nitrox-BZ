@@ -19,10 +19,7 @@ namespace NitroxServer.Serialization.World
 
         [DataMember(Order = 4)]
         public EntityData EntityData { get; set; }
-
-        [DataMember(Order = 5)]
-        public bool IsBelowZero { get; set; }
-
+        
         public static PersistedWorldData From(World world)
         {
             return new PersistedWorldData
@@ -31,12 +28,12 @@ namespace NitroxServer.Serialization.World
                 {
                     ParsedBatchCells = world.BatchEntitySpawner.SerializableParsedBatches,
                     GameData = GameData.From(world.GameData.PDAState, world.GameData.StoryGoals, world.ScheduleKeeper, world.StoryManager, world.TimeKeeper),
-                    Seed = world.Seed
+                    Seed = world.Seed,
+                    IsBelowZero = world.IsBelowZero
                 },
                 PlayerData = PlayerData.From(world.PlayerManager.GetAllPlayers()),
                 GlobalRootData = GlobalRootData.From(world.WorldEntityManager.GetGlobalRootEntities(true)),
-                EntityData = EntityData.From(world.EntityRegistry.GetAllEntities(true)),
-                IsBelowZero = world.IsBelowZero
+                EntityData = EntityData.From(world.EntityRegistry.GetAllEntities(true))
             };
         }
 

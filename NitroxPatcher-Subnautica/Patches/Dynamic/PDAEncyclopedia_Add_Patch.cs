@@ -20,7 +20,7 @@ public sealed partial class PDAEncyclopedia_Add_Patch : NitroxPatch, IDynamicPat
         // Is null when it's a duplicate call
         if (__result != null)
         {
-            Resolve<IPacketSender>().Send(new PDAEncyclopediaEntryAdd(key, verbose));
+            Resolve<IPacketSender>().Send(new PDAEncyclopediaEntryAdd(key, verbose, true));
         }
     }
 }

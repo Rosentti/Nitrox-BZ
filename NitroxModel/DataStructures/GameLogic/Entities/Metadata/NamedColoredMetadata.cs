@@ -9,6 +9,7 @@ namespace NitroxModel.DataStructures.GameLogic.Entities.Metadata;
 [Serializable, DataContract]
 [ProtoInclude(50, typeof(VehicleMetadata))]
 [ProtoInclude(51, typeof(SubNameInputMetadata))]
+[ProtoInclude(52, typeof(ColorNameControlMetadata))]
 public abstract class NamedColoredMetadata : EntityMetadata
 {
     [DataMember(Order = 1)]

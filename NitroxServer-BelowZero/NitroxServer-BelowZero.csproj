@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net472</TargetFramework>
+        <OutputType>Exe</OutputType>
+        <RootNamespace>NitroxServer_BelowZero</RootNamespace>
+        <Nullable>disable</Nullable>
+        <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+        <GameReference>BelowZero</GameReference>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\NitroxModel-BelowZero\NitroxModel-BelowZero.csproj" />
+        <ProjectReference Include="..\NitroxServer\NitroxServer.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="AssetsTools.NET" Version="3.0.0-preview1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="protobuf-net, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>..\Nitrox.Assets.BelowZero\protobuf-net.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+  <Target Name="MoveNitroxAssetsToServerOutput" AfterTargets="Build">
+    <ItemGroup>
+      <NitroxBelowZeroTypeTreeData Include="..\Nitrox.Assets.BelowZero\**\*.tpk" />
+    </ItemGroup>
+    <Copy SourceFiles="@(NitroxBelowZeroTypeTreeData)" DestinationFolder="$(TargetDir)\%(RecursiveDir)" />
+  </Target>
+</Project>

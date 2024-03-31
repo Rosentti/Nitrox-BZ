@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net472</TargetFramework>
+        <Nullable>disable</Nullable>
+        <GameReference>BelowZero</GameReference>
+        <RootNamespace>NitroxClient_BelowZero</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\NitroxModel-BelowZero\NitroxModel-BelowZero.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Reference Include="LitJson">
+            <HintPath>$(GameManagedDir)\LitJson.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="protobuf-net, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+            <HintPath>..\Nitrox.Assets.BelowZero\protobuf-net.dll</HintPath>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="DiscordGameSDKWrapper" Version="3.2.1" />
+    </ItemGroup>
+
+</Project>

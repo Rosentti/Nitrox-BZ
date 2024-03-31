@@ -17,6 +17,9 @@ namespace NitroxServer.Serialization.World
         [DataMember(Order = 3)]
         public string Seed { get; set; }
 
+        [DataMember(Order = 4)]
+        public bool IsBelowZero { get; set; }
+
         public bool IsValid()
         {
             return ParsedBatchCells != null && // Always returns false on empty saves (sometimes also if never entered the ocean)

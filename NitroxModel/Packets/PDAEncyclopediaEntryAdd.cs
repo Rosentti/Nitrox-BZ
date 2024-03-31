@@ -11,9 +11,15 @@ public class PDAEncyclopediaEntryAdd : Packet
     /// </summary>
     public bool Verbose { get; }
 
-    public PDAEncyclopediaEntryAdd(string key, bool verbose)
+    /// <summary>
+    ///     (BZ ONLY) Should a notification be shown to the player
+    /// </summary>
+    public bool PostNotification { get; }
+
+    public PDAEncyclopediaEntryAdd(string key, bool verbose, bool postNotification)
     {
         Key = key;
         Verbose = verbose;
+        PostNotification = postNotification;
     }
 }
