@@ -32,35 +32,13 @@ namespace NitroxClient_BelowZero.GameLogic.Spawning.WorldEntities
                 yield break;
             }
 
-            //TODO: get with filename 'WorldEntities/Tools/LifepodDrop.prefab' instead
-            string classid = "";
-            foreach (var file in PrefabDatabase.prefabFiles)
-            {
-                if (file.Value == "WorldEntities/Tools/LifepodDrop.prefab") {
-                    classid = file.Key;
-                }
-            }
+            TaskResult<GameObject> prefabResult = new();
+            yield return DefaultWorldEntitySpawner.RequestPrefabByFilename("WorldEntities/Tools/LifepodDrop.prefab", prefabResult);
 
-            if (string.IsNullOrEmpty(classid)) {
-                Log.Error("Did not find LifepodDrop.prefab");
-                yield break;
-            }
+            GameObject gameObject = GameObjectHelper.InstantiateWithId(prefabResult.Get(), entity.Id);
 
-            if (!DefaultWorldEntitySpawner.TryGetCachedPrefab(out GameObject prefab, classId: classid))
-            {
-                TaskResult<GameObject> prefabResult = new();
-                yield return DefaultWorldEntitySpawner.RequestPrefab(classid, prefabResult);
-                if (!prefabResult.Get())
-                {
-                    Log.Error($"Couldn't find a prefab for {nameof(WorldEntity)} of ClassId '{classid}'");
-                    yield break;
-                }
-                prefab = prefabResult.Get();
-            }
-
-            GameObject gameObject = GameObjectHelper.InstantiateWithId(prefab, entity.Id);
-
-            // The RespawnPoint is missing, although it should exist. Just add it here since it's logic is very simple.
+            // If we don't add our own RespawnPoint, the player will teleport under the lifepod
+            // This hack works well enough. (We could fix the RespawnPoint to the correct positions instead, but that's a lot of effort when this does the job just fine)
             gameObject.AddComponent<RespawnPoint>();
 
             entityMetadataManager.ApplyMetadata(gameObject, escapePodEntity.Metadata);

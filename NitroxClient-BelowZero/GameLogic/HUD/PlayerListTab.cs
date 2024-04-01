@@ -15,7 +15,7 @@ public class PlayerListTab : NitroxPDATab
 
     public override uGUI_PDATab uGUI_PDATab => tab;
 
-    public override PDATab PDATabId => (PDATab)8;
+    public override PDATab PDATabId => (PDATab)9;
 
     public override void OnInitializePDA(uGUI_PDA uGUI_PDA)
     {

@@ -10,6 +10,6 @@ namespace NitroxClient_BelowZero.GameLogic {
     public class NitroxLifepodDrop {
         public static GameObject main;
         public static LifepodDrop drop => main.RequireComponent<LifepodDrop>();
-        public static RespawnPoint respawnPoint => main.RequireComponent<RespawnPoint>();
+        public static RespawnPoint respawnPoint => main.RequireComponentInChildren<RespawnPoint>(true);
     }
 }

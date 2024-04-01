@@ -80,7 +80,7 @@ namespace NitroxServer.GameLogic
         {
             // In Below Zero, the position should always be the same
             if (gameInfo == GameInfo.SubnauticaBelowZero) {
-                return new NitroxVector3(-136.2f, -11f, 43.7f);
+                return new NitroxVector3(-136.2f, -12f, 43.7f);
             }
 
             List<EscapePodWorldEntity> escapePods = entityRegistry.GetEntities<EscapePodWorldEntity>();

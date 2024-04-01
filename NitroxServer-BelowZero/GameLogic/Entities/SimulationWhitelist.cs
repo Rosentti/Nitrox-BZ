@@ -67,6 +67,8 @@ public class SimulationWhitelist : ISimulationWhitelist
         TechType.RockPuncher.ToDto(),
         TechType.Peeper.ToDto(),
         TechType.Jumper.ToDto(),
+        TechType.Penguin.ToDto(),
+        TechType.PenguinBaby.ToDto(),
         TechType.Constructor.ToDto()
     };
 

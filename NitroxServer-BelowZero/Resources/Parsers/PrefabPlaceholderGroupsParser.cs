@@ -84,7 +84,7 @@ public class PrefabPlaceholderGroupsParser : IDisposable
 
     private void LoadAddressableCatalog(Dictionary<string, string> prefabDatabase)
     {
-        ContentCatalogData ccd = AddressablesJsonParser.FromString(File.ReadAllText(Path.Combine(aaRootPath, "catalog.json")));
+        ContentCatalogData ccd = AddressablesBinaryParser.FromStream(File.OpenRead(Path.Combine(aaRootPath, "catalog.json")));
         Dictionary<string, string> classIdByPath = prefabDatabase.ToDictionary(m => m.Value, m => m.Key);
 
         foreach (KeyValuePair<object, List<ResourceLocation>> entry in ccd.Resources)

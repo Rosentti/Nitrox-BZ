@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using NitroxModel.DataStructures;
@@ -181,4 +182,33 @@ public class DefaultWorldEntitySpawner : IWorldEntitySpawner, IWorldEntitySyncSp
     }
 
     public bool SpawnsOwnChildren() => false;
+
+    public static IEnumerator RequestPrefabByFilename(string filename, TaskResult<GameObject> prefabResult)
+    {
+        string classid = "";
+        foreach (var file in PrefabDatabase.prefabFiles)
+        {
+            if (file.Value == filename) {
+                classid = file.Key;
+                yield return null;
+            }
+        }
+
+        if (string.IsNullOrEmpty(classid)) {
+            Log.Error($"Did not find {filename}");
+            yield break;
+        }
+
+        if (!DefaultWorldEntitySpawner.TryGetCachedPrefab(out GameObject prefab, classId: classid))
+        {
+            yield return DefaultWorldEntitySpawner.RequestPrefab(classid, prefabResult);
+            if (!prefabResult.Get())
+            {
+                Log.Error($"Couldn't find a prefab for ClassId '{classid}'");
+                yield break;
+            }
+        } else {
+            prefabResult.Set(prefab);
+        }
+    }
 }

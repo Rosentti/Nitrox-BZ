@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Diagnostics;
 using NitroxClient_BelowZero.Communication;
@@ -16,7 +17,7 @@ namespace NitroxClient_BelowZero.GameLogic.InitialSync;
 
 public class PlayerPositionInitialSyncProcessor : InitialSyncProcessor
 {
-    private static readonly Vector3 spawnRelativeToLifepod = new Vector3(0.9f, 2.1f, 0);
+    private static readonly Vector3 spawnRelativeToLifepod = new Vector3(0f, 1.5f, 0);
 
     private readonly IPacketSender packetSender;
 
@@ -45,6 +46,8 @@ public class PlayerPositionInitialSyncProcessor : InitialSyncProcessor
 
         // Player position is relative to a subroot if in a subroot
         Optional<NitroxId> subRootId = packet.PlayerSubRootId;
+        Log.Info($"Initial sync SubRoot: {subRootId}");
+
         if (!subRootId.HasValue)
         {
             yield return Terrain.WaitForWorldLoad();
@@ -91,15 +94,18 @@ public class PlayerPositionInitialSyncProcessor : InitialSyncProcessor
         NitroxLifepodDrop.main = lifepod;
         NitroxLifepodDrop.drop.dropZone = new SupplyDropZone(lifepod.transform.position);
         NitroxLifepodDrop.main.transform.position = lifepod.transform.position;
+        NitroxLifepodDrop.respawnPoint.transform.position = lifepod.transform.position;
+
+        // Remove parachute, add legs, adjust ping
         NitroxLifepodDrop.drop.dropComplete = true;
-        NitroxLifepodDrop.respawnPoint.transform.position = lifepod.transform.position + spawnRelativeToLifepod;
-        NitroxLifepodDrop.drop.extendLegs = true;
-        NitroxLifepodDrop.main.GetComponent<PingInstance>().pingType = PingType.DropPod;
-        
+        NitroxLifepodDrop.drop.SetPingInstanceToPod();
+		NitroxLifepodDrop.drop.DisableParachute();
+		NitroxLifepodDrop.drop.podAnimator.SetTrigger("leg_extension");
+		NitroxLifepodDrop.drop.podAnimator.SetTrigger("solar_deploy");
+        NitroxLifepodDrop.drop.StartExtendLegs();
 
-        Player.main.transform.position = NitroxLifepodDrop.respawnPoint.GetSpawnPosition();
-
-        //Player.main.EnterInterior(NitroxLifepodDrop.main.RequireComponent<LifepodDrop>());
+        Player.main.transform.position = NitroxLifepodDrop.respawnPoint.GetSpawnPosition() + spawnRelativeToLifepod;
+        Player.main.transform.rotation = NitroxLifepodDrop.main.transform.rotation;
     }
 
 }

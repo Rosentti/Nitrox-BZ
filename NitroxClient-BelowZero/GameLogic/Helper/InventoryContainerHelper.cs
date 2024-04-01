@@ -13,7 +13,7 @@ namespace NitroxClient_BelowZero.GameLogic.Helper
         private static readonly Regex LockerRegex = new(@"Locker0([0-9])StorageRoot$", RegexOptions.IgnoreCase);
         private const string LOCKER_BASE_NAME = "submarine_locker_01_0";
         private const string PLAYER_OBJECT_NAME = "Player";
-        private const string ESCAPEPOD_OBJECT_NAME = "EscapePod";
+        private const string ESCAPEPOD_OBJECT_NAME = "LifepodDrop";
         
         public static Optional<ItemsContainer> TryGetContainerByOwner(GameObject owner)
         {

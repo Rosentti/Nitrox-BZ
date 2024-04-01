@@ -109,7 +109,7 @@ public class uGUI_PlayerListTab : uGUI_PingTab
 
     public override void OnLanguageChanged()
     {
-        pingManagerLabel.text = Language.main.Get("Nitrox_PlayerListTabName");
+        pingManagerLabel.text = Language.main.Get("Nitrox_PlayerListTabHeader");
         entries.Values.ForEach(entry => entry.OnLanguageChanged());
     }
 

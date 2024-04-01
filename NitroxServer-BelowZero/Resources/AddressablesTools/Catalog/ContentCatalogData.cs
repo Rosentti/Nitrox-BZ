@@ -162,7 +162,7 @@ namespace AddressablesTools.Catalog
             }
         }
 
-        private struct Bucket
+        protected struct Bucket
         {
             public int offset;
             public int[] entries;
@@ -171,6 +171,20 @@ namespace AddressablesTools.Catalog
             {
                 this.offset = offset;
                 this.entries = entries;
+            }
+
+            public static Bucket ReadBinary(BinaryReader reader)
+            {
+                int offset = reader.ReadInt32();
+
+                int arrayLength = reader.ReadInt32();
+                int[] entries = new int[arrayLength];
+                for (int i = 0; i < arrayLength; i++)
+                {
+                    entries[i] = reader.ReadInt32();
+                }
+
+                return new Bucket(offset, entries);
             }
         }
     }
